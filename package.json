@@ -1,0 +1,17 @@
+{
+  "name": "BYOB",
+  "version": "1.0.0",
+  "description": "",
+  "main": "knexfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3",
+    "knex": "^0.15.0",
+    "pg": "^7.4.3"
+  }
+}
