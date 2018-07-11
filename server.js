@@ -80,6 +80,34 @@ app.post('/api/v1/games', (request, response) => {
     })
 })
 
+app.post('/api/v1/pictures', (request, response) => {
+  const { picture } = request.body;
+  for (let requiredParameter of ['url', 'game_id', 'gameName']) {
+    if(!picture[requiredParameter]) {
+      return response
+        .status(422)
+        .send({ error: `Expected format {url: <String>, game_id: <Integer>, gameName: <String>} You're missing a ${requiredParameter} property.`})
+    }
+  }
+  database('games').where('id', picture.game_id).select()
+    .then(game => {
+      if(game.length) {
+        database('pictures').insert(picture, 'id')
+          .then(pictureId => {
+            response.status(201).json({ id: pictureId[0] })
+          })
+          .catch( error => {
+            throw Error
+          })
+      } else {
+        response.status(500).json({ error: 'Could not find matching game for picture submitted' })
+      }
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    })
+})
+
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
 });
