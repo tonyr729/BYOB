@@ -120,6 +120,18 @@ app.patch('/api/v1/games/:id', (request, response) => {
     })
 })
 
+app.patch('/api/v1/pictures/:id', (request, response) => {
+  const { picture } = request.body
+  const { id } = request.params
+  database('pictures').where('id', id).update(picture, 'id')
+    .then(pictureId => {
+      response.status(202).json({ id: pictureId[0] })
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    })
+})
+
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
 });
