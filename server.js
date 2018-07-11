@@ -132,7 +132,21 @@ app.patch('/api/v1/pictures/:id', (request, response) => {
     })
 })
 
-app.delete('/api/v1/games')
+app.delete('/api/v1/games/:id', (request, response) => {
+  const { id } = request.params;
+  database('pictures').where('game_id', id).del()
+    .then(() => {
+      response.sendStatus(204)
+    })
+    .then(() => {
+      database('games').where('id', id).del()
+        .then(() => response.sendStatus(204))
+        .catch(error => response.status(404).json({ Error: `Cannot find matching game id: ${id}`}))
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    })
+})
 
 app.delete('/api/v1/pictures/:id', (request, response) => {
   const { id } = request.params;
