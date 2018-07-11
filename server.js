@@ -132,6 +132,13 @@ app.patch('/api/v1/pictures/:id', (request, response) => {
     })
 })
 
+app.delete('/api/v1/pictures/:id', (request, response) => {
+  const { id } = request.params;
+  database('pictures').where('id', id).del()
+    .then(() => response.sendStatus(204))
+    .catch(error => response.status(404).json({ Error: `Cannot find matching id: ${id}`}))
+})
+
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
 });
