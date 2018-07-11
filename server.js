@@ -111,10 +111,9 @@ app.post('/api/v1/pictures', (request, response) => {
 app.patch('/api/v1/games/:id', (request, response) => {
   const { game } = request.body
   const { id } = request.params
-  const requiredParams = ['title', 'url', 'genre']
   database('games').where('id', id).update(game, 'id')
     .then(gameId => {
-      response.status(202).json({ id: gameId})
+      response.status(202).json({ id: gameId[0] })
     })
     .catch(error => {
       response.status(500).json({ error })
