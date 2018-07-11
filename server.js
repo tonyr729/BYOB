@@ -47,6 +47,21 @@ app.get('/api/v1/pictures', (request, response) => {
     })
 })
 
+app.get('/api/v1/pictures/:id', (request, response) => {
+  const {id} = request.params
+  database('pictures').where('id', id).select()
+    .then(picture => {
+      if(picture.length) {
+        response.status(200).json(picture)
+      } else {
+        throw Error;
+      }
+    })
+    .catch(error => {
+      response.status(500).json({ errorMessage: `Could not find picture with id of ${id}`, error })        
+    })
+})
+
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
 });
