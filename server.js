@@ -37,6 +37,16 @@ app.get('/api/v1/games/:id', (request, response) => {
     })
 })
 
+app.get('/api/v1/pictures', (request, response) => {
+  database('pictures').select()
+    .then(pictures => {
+      response.status(200).json(pictures)
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    })
+})
+
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
 });
