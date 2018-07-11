@@ -62,6 +62,24 @@ app.get('/api/v1/pictures/:id', (request, response) => {
     })
 })
 
+app.post('/api/v1/games', (request, response) => {
+  const { game } = request.body
+  for(let requiredParameter of ['title', 'url', 'genre']) {
+    if(!game[requiredParameter]){
+      return response
+        .status(422)
+        .send({ error: `Expected format {title: <String>, url: <String>, genre: <String>}. You're missing a ${requiredParameter} property.`})
+    } 
+  }
+  database('games').insert(game, 'id')
+    .then(gameId => {
+      response.status(201).json({ id: gameId[0] })
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    })
+})
+
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
 });
