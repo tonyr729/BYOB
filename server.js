@@ -132,6 +132,8 @@ app.patch('/api/v1/pictures/:id', (request, response) => {
     })
 })
 
+app.delete('/api/v1/games')
+
 app.delete('/api/v1/pictures/:id', (request, response) => {
   const { id } = request.params;
   database('pictures').where('id', id).del()
