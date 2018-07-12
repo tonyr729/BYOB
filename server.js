@@ -12,18 +12,19 @@ app.set('port', process.env.PORT || 3000);
 app.locals.title = 'BYOB';
 
 app.use(bodyParser.json())
+app.use(express.static('public'));
 
-app.post('/', (response, request) => {
+app.post('/', (request, response) => {
   const { email, appName } = request.body;
   if ( email && appName) {
     const payload = { email, appName }
     const token = jwt.sign(payload, secretKey);
 
-    request.status(201).json({ token })
+    response.status(201).json({ token })
   } else {
-    request.status(500).json({error: 'Invalid keys within request body.')
+    response.status(500).json({error: 'Invalid keys within request body.'})
   }
-}
+});
 
 app.get('/api/v1/games', (request, response) => {
   database('games').select()
