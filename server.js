@@ -14,6 +14,20 @@ app.locals.title = 'BYOB';
 app.use(bodyParser.json())
 app.use(express.static('public'));
 
+const checkAuth = (request, response, next) => {
+  if (request.body.token) {   
+    try {
+      const decoded = jwt.verify(request.body.token, secretKey);
+      console.log(decoded)
+      next()
+    } catch(error) {
+      response.status(401).json({error: "Token not recognized!"})
+    }
+  } else {
+    response.status(403).json({error: "You must provide an authorized token!"})
+  }
+}
+
 app.post('/', (request, response) => {
   const { email, appName } = request.body;
   if ( email && appName) {
@@ -76,7 +90,7 @@ app.get('/api/v1/pictures/:id', (request, response) => {
     })
 })
 
-app.post('/api/v1/games', (request, response) => {
+app.post('/api/v1/games', checkAuth, (request, response) => {
   const { game } = request.body
   for(let requiredParameter of ['title', 'url', 'genre']) {
     if(!game[requiredParameter]){
@@ -94,7 +108,7 @@ app.post('/api/v1/games', (request, response) => {
     })
 })
 
-app.post('/api/v1/pictures', (request, response) => {
+app.post('/api/v1/pictures', checkAuth, (request, response) => {
   const { picture } = request.body;
   for (let requiredParameter of ['url', 'game_id', 'gameName']) {
     if(!picture[requiredParameter]) {
@@ -122,7 +136,7 @@ app.post('/api/v1/pictures', (request, response) => {
     })
 })
 
-app.patch('/api/v1/games/:id', (request, response) => {
+app.patch('/api/v1/games/:id', checkAuth, (request, response) => {
   const { game } = request.body
   const { id } = request.params
   database('games').where('id', id).update(game, 'id')
@@ -134,7 +148,7 @@ app.patch('/api/v1/games/:id', (request, response) => {
     })
 })
 
-app.patch('/api/v1/pictures/:id', (request, response) => {
+app.patch('/api/v1/pictures/:id', checkAuth, (request, response) => {
   const { picture } = request.body
   const { id } = request.params
   database('pictures').where('id', id).update(picture, 'id')
@@ -146,7 +160,7 @@ app.patch('/api/v1/pictures/:id', (request, response) => {
     })
 })
 
-app.delete('/api/v1/games/:id', (request, response) => {
+app.delete('/api/v1/games/:id', checkAuth, (request, response) => {
   const { id } = request.params;
   database('pictures').where('game_id', id).del()
     .then(() => {
@@ -162,7 +176,7 @@ app.delete('/api/v1/games/:id', (request, response) => {
     })
 })
 
-app.delete('/api/v1/pictures/:id', (request, response) => {
+app.delete('/api/v1/pictures/:id', checkAuth, (request, response) => {
   const { id } = request.params;
   database('pictures').where('id', id).del()
     .then(() => response.sendStatus(204))
