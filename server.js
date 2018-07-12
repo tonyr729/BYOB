@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser')
 const jwt = require('jsonwebtoken')
+const secretKey = require('./secret_key');
 
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
@@ -11,6 +12,18 @@ app.set('port', process.env.PORT || 3000);
 app.locals.title = 'BYOB';
 
 app.use(bodyParser.json())
+
+app.post('/', (response, request) => {
+  const { email, appName } = request.body;
+  if ( email && appName) {
+    const payload = { email, appName }
+    const token = jwt.sign(payload, secretKey);
+
+    request.status(201).json({ token })
+  } else {
+    request.status(500).json({error: 'Invalid keys within request body.')
+  }
+}
 
 app.get('/api/v1/games', (request, response) => {
   database('games').select()

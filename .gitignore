@@ -61,4 +61,4 @@ typings/
 .next
 
 # untracked files
-private_key.js
+secret_key.js
