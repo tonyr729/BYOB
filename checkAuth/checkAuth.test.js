@@ -9,8 +9,7 @@ describe('checkAuth', () => {
         NODE_ENV: 'test'
       }
     }
-    checkAuth();
-    
+
   })
 
   it('should call next if the the request.body has a token that is authenticated', () => {

@@ -10,6 +10,7 @@ const database = require('knex')(configuration);
 chai.use(chaiHttp);
 
 describe('CLIENT routes', () => {
+  
   it('should receive a response of a string when we hit the root endpoint', done => {
     chai.request(server)
       .get('/')
@@ -43,6 +44,36 @@ describe('API Routes', () => {
         done();
       });
   });
+
+  describe('POST /', () => {
+    it('should return a response with a token', done => {
+      chai.request(server)
+        .post('/')
+        .send({
+          email: 'garbage@trash.com',
+          appName: 'garbage-man'
+        })
+        .end((error, response) => {
+          response.should.have.status(201);
+          response.should.be.json;
+          response.body.should.be.a('object');
+          response.body.should.have.property('token');
+          done()
+        })
+    })
+
+    it('should return response with status of 500 if there are incorrect request body keys', done => {
+      chai.request(server)
+        .post('/')
+        .send({
+          garbage: 'sushi'
+        })
+        .end((error, response) => {
+          response.should.have.status(500);
+          done();
+        })
+    })
+  })
 
   describe('GET /api/v1/games', () => {
     it('should return all of the games', done => {
@@ -82,6 +113,15 @@ describe('API Routes', () => {
           done();
         });
     });
+
+    it('should return a response with a status of 500 if incorrect id is provided', done => {
+      chai.request(server)
+        .get('/api/v1/games/10s001')
+        .end((error, response) => {
+          response.should.have.status(500);
+          done();
+        })
+    })
   });
 
   describe('GET /api/v1/pictures', () => {
@@ -118,6 +158,15 @@ describe('API Routes', () => {
           done();
         });
     });
+
+    it('should return a response with a status of 500 if incorrect id is provided', done => {
+      chai.request(server)
+        .get('/api/v1/pictures/10s001')
+        .end((error, response) => {
+          response.should.have.status(500);
+          done();
+        })
+    })
   });
 
   describe('POST /api/v1/games', () => {
@@ -138,6 +187,20 @@ describe('API Routes', () => {
           (response.body).should.have.property('id');
           response.body.id.should.equal(31);
           done()
+        })
+    })
+
+    it('should return a response with status 422 if there is a missing parameter', done => {
+      chai.request(server)
+        .post('/api/v1/games')
+        .send({
+          game: {
+            title: 'so tired of this project'
+          }
+        })
+        .end((error, response) => {
+          response.should.have.status(422);
+          done();
         })
     })
   })
@@ -162,6 +225,36 @@ describe('API Routes', () => {
           done()
         })
     })
+
+    it('should return a response with status 422 if there is a missing parameter', done => {
+      chai.request(server)
+        .post('/api/v1/pictures')
+        .send({
+          picture: {
+            url: 'sotiredofthisproject.jpg'
+          }
+        })
+        .end((error, response) => {
+          response.should.have.status(422);
+          done();
+        })
+    })
+
+    it('should return a response with status 500 if there was no game match', done => {
+      chai.request(server)
+        .post('/api/v1/pictures')
+        .send({
+          picture: {
+            url: 'partybus.jpg',
+            game_id: 20000,
+            gameName: 'Party Bus 2: The Revenge of Tony'
+          }
+        })
+        .end((error, response) => {
+          response.should.have.status(500);
+          done();
+        })
+    })
   })
 
   describe('PATCH /api/v1/games/:id', () => {
@@ -182,6 +275,24 @@ describe('API Routes', () => {
               response.body.should.be.a('object');
               response.body.should.have.property('id');
               response.body.id.should.equal(1);
+              done();
+            })
+        })
+    })
+
+    it('should return a response with a status of 500 if incorrect id is provided', done => {
+      chai.request(server)
+        .get('/api/v1/games')
+        .end((error, response) => {
+          chai.request(server)
+            .patch('/api/v1/games/34fsfd')
+            .send({
+              game: {
+                title: 'Tony'
+              }
+            })
+            .end((error, response) => {
+              response.should.have.status(500);
               done();
             })
         })
@@ -209,17 +320,20 @@ describe('API Routes', () => {
             })
         })
     })
-  })
 
-  describe('DELETE, api/v1/games/:id', () => {
-    it('should delete a specific game based on parameters', done => {
+    it('should return a response with a status of 500 if incorrect id is provided', done => {
       chai.request(server)
-        .get('/api/v1/games')
+        .get('/api/v1/pictures')
         .end((error, response) => {
           chai.request(server)
-            .delete('/api/v1/games/' + response.body[0].id)
+            .patch('/api/v1/pictures/34fsfd')
+            .send({
+              picture: {
+                url: 'boopbap.png'
+              }
+            })
             .end((error, response) => {
-              response.should.have.status(204);
+              response.should.have.status(500);
               done();
             })
         })
@@ -227,7 +341,7 @@ describe('API Routes', () => {
   })
 
   describe('DELETE, api/v1/pictures/:id', () => {
-    it.only('should delete a specific pictures based on parameters', done => {
+    it('should delete a specific pictures based on parameters', done => {
       chai.request(server)
         .get('/api/v1/pictures')
         .end((error, response) => {
@@ -239,5 +353,49 @@ describe('API Routes', () => {
             })
         })
     })
+
+    it('should return a response with a status of 500 if incorrect id is provided', done => {
+      chai.request(server)
+        .get('/api/v1/pictures')
+        .end((error, response) => {
+          chai.request(server)
+            .delete('/api/v1/pictures/34fsfd')
+            .end((error, response) => {
+              response.should.have.status(404);
+              done();
+            })
+        })
+    })
   })
+
+  describe('DELETE, api/v1/games/:id', () => {
+    
+
+    it('should return a response with a status of 500 if incorrect id is provided', done => {
+      chai.request(server)
+        .get('/api/v1/games')
+        .end((error, response) => {
+          chai.request(server)
+            .delete('/api/v1/games/34fsfd')
+            .end((error, response) => {
+              response.should.have.status(500);
+              done();
+            })
+        })
+    })
+  })
+
+  // it('should delete a specific game based on parameters', done => {
+  //   chai.request(server)
+  //     .get('/api/v1/games')
+  //     .end((error, response) => {
+  //       chai.request(server)
+  //         .delete('/api/v1/games/' + response.body[0].id)
+  //         .end((error, response) => {
+  //           response.should.have.status(204);
+  //           done();
+  //         })
+  //     })
+  // })
+
 });
