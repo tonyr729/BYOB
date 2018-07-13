@@ -1,9 +1,15 @@
 language: node_js
 node_js:
-  - "node"
-services: 
-  - postgresql
+- node
+services:
+- postgresql
 before_script:
-  - psql -c 'CREATE DATABASE byob_test;' -U postgres
+- psql -c 'CREATE DATABASE byob_test;' -U postgres
 notifications:
   email: false
+deploy:
+  provider: heroku
+  api_key:
+    secure: MuMSXrVVs1QEtJkvM7rkg1bm4b4MUNZzLt0P4paD6nZ8Fe32lmQLvv/FuGSjo/cjfMEGYIGfJp9WghpjPsixko/wzu6m8uNyCdmAz+9lTzPY4q+Bmw7rpFY/O3G24ern7IdqRt+29m31ExkcirSxSQ9KFAsb4j/yvpJU52LQwqLCjH4+/NOSffanhSHoeyzywdBYA6cJNArtwNJuN+snzkZA/Psz2IK5n0yNkd7As5xtU8qse42lw0Zda5bhWANdpBRvCrMYxBz2DaPthiySktWg1r5ZaeaIPFLbgM1l6iMEpyPI6/goY0u6TmMf6kU8TgrMgxXIAUGIl3BJ1XBtMxdwHmRLknNJSi00Qg6X1T2lPcECGbOjKh59bBlHxc5LZY5LhDonZ2zYTes02c2tRu/tDKoWja/UIQrKM2SgpIDK9/k8mTz7eg629VtUqfKWKP+IHjB6m10r3utGHJWBJIlrHH2bv3ERon8CCz6GezlfwWn9IIOGJJAqpbuyPZeiLYQytA5lQILTf35W0n37cL5m7ZAsqOixmENfvbmGO28pfbelSkNclJfTGwwU2p1HzYPL+rEmcAtYPyyQNqaJ36WUbAZOHQ0JwzdzG8zF1Iie9gohBQaKOHG2F68r6DHtkuY1wpsFPI+T3hPtBqnkCxMFBHsh3B2DpCfdR6v0u7c=
+  app: byob-2018-games
+skip_cleanup: true
