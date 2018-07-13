@@ -6,6 +6,20 @@ https://travis-ci.org/tonyr729/BYOB.svg?branch=master
 
 BYOB (Build Your Own Backend) is an application serving up endpoints for unreleased games for 2018.  Users must provide an email address and application name to receive token access.  This token allows them to access the database.
 
+### Endpoints
+
+* ```POST - /```
+* ```GET - /api/v1/games```
+* ```GET - /api/v1/pictures```
+* ```GET - /api/v1/games/:id```
+* ```GET - /api/v1/pictures/:id```
+* ```POST - /api/v1/games/:id```
+* ```POST - /api/v1/pictures/:id```
+* ```PATCH - /api/v1/games/:id```
+* ```PATCH - /api/v1/pictures/:id```
+* ```DELETE - /api/v1/games/:id```
+* ```DELETE = /api/v1/pictures/:id```
+
 ### Tools/Technologies
 
 * Express
