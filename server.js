@@ -22,13 +22,13 @@ app.post('/', (request, response) => {
   
   if ( email && appName) {
     const payload = { email, appName }
-    
+
     try {
       const token = jwt.sign(payload, process.env.SECRET_KEY);
   
       response.status(201).json({ token })
     } catch (error) {
-      console.log(error)
+      response.status(500).json({error})
     }
   } else {
     response.status(500).json({error: 'Invalid keys within request body.'})
