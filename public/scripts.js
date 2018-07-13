@@ -23,6 +23,9 @@ const postUserInfo = (email, appName) => {
     .then(response => response.json())
     .then(data => {
       tokenContainer.innerText = 'Token: ' + data.token;
-    });
+    })
+    .catch(error => {
+      tokenContainer.innerText = json.stringify(error)
+    })
 };
 
