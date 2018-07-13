@@ -19,11 +19,12 @@ app.use(express.static('public'));
 
 app.post('/', (request, response) => {
   const { email, appName } = request.body;
-  
+
   if ( email && appName) {
     const payload = { email, appName }
     const token = jwt.sign(payload, process.env.SECRET_KEY, ((error, token) => {
       console.log(error);
+      return token;
     }));
 
     response.status(201).json({ token })
