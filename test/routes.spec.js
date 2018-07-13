@@ -95,9 +95,9 @@ describe('API Routes', () => {
           response.body.should.be.a('array');
           response.body.length.should.equal(60);
           (response.body[0]).should.have.property('url');
-          (response.body[0].title).should.equal('https://images.ctfassets.net/rporu91m20dc/1FNG5YWPv6ayEcsocG8Ymi/bfbdd424ea5f3c7bac79874c9a608376/Fallout76_E3_T51b_Desktop.png?w=1480');
+          (response.body[0].url).should.equal('https://images.ctfassets.net/rporu91m20dc/1FNG5YWPv6ayEcsocG8Ymi/bfbdd424ea5f3c7bac79874c9a608376/Fallout76_E3_T51b_Desktop.png?w=1480');
           (response.body[0]).should.have.property('gameName');
-          (response.body[0].url).should.equal('Fallout 76');
+          (response.body[0].gameName).should.equal('Fallout 76');
           done();
         });
     });
@@ -113,9 +113,9 @@ describe('API Routes', () => {
           response.body.should.be.a('array');
           response.body.length.should.equal(1);
           (response.body[0]).should.have.property('url');
-          (response.body[0].title).should.equal('https://images.ctfassets.net/rporu91m20dc/1FNG5YWPv6ayEcsocG8Ymi/bfbdd424ea5f3c7bac79874c9a608376/Fallout76_E3_T51b_Desktop.png?w=1480');
+          (response.body[0].url).should.equal('https://images.ctfassets.net/rporu91m20dc/1FNG5YWPv6ayEcsocG8Ymi/bfbdd424ea5f3c7bac79874c9a608376/Fallout76_E3_T51b_Desktop.png?w=1480');
           (response.body[0]).should.have.property('gameName');
-          (response.body[0].url).should.equal('Fallout 76');
+          (response.body[0].gameName).should.equal('Fallout 76');
           done();
         });
     });

@@ -1,8 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser')
 const jwt = require('jsonwebtoken')
-const secretKey = require('./secret_key');
 
 
 app.set('port', process.env.PORT || 3000);
@@ -20,7 +20,7 @@ app.use(express.static('public'));
 const checkAuth = (request, response, next) => {
   if (request.body.token) {   
     try {
-      const decoded = jwt.verify(request.body.token, secretKey);
+      const decoded = jwt.verify(request.body.token, process.env.SECRET_KEY);
       console.log(decoded)
       next()
     } catch(error) {
@@ -35,7 +35,7 @@ app.post('/', (request, response) => {
   const { email, appName } = request.body;
   if ( email && appName) {
     const payload = { email, appName }
-    const token = jwt.sign(payload, secretKey);
+    const token = jwt.sign(payload, process.env.SECRET_KEY);
 
     response.status(201).json({ token })
   } else {
