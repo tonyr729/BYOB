@@ -18,16 +18,19 @@ app.use(bodyParser.json())
 app.use(express.static('public'));
 
 const checkAuth = (request, response, next) => {
-  if (request.body.token) {   
-    try {
-      const decoded = jwt.verify(request.body.token, process.env.SECRET_KEY);
-      console.log(decoded)
-      next()
-    } catch(error) {
-      response.status(401).json({error: "Token not recognized!"})
-    }
+  if (process.env.NODE_ENV === 'test') {
+    next();
   } else {
-    response.status(403).json({error: "You must provide an authorized token!"})
+    if (request.body.token) {
+      try {
+        const decoded = jwt.verify(request.body.token, process.env.SECRET_KEY);
+        next()
+      } catch (error) {
+        response.status(401).json({ error: "Token not recognized!" })
+      }
+    } else {
+      response.status(403).json({ error: "You must provide an authorized token!" })
+    }
   }
 }
 

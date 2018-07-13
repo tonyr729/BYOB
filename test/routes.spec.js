@@ -1,4 +1,4 @@
-const environment = process.env.NODE_ENV || 'test'; 
+const environment = process.env.NODE_ENV || 'test';
 
 const chai = require('chai');
 const should = chai.should();
@@ -6,7 +6,6 @@ const chaiHttp = require('chai-http');
 const server = require('../server');
 const configuration = require('../knexfile')[environment];
 const database = require('knex')(configuration);
-
 
 chai.use(chaiHttp);
 
@@ -120,4 +119,125 @@ describe('API Routes', () => {
         });
     });
   });
+
+  describe('POST /api/v1/games', () => {
+    it('should create a new game', done => {
+      chai.request(server)
+        .post('/api/v1/games')
+        .send({
+          game: {
+            title: 'This is the game',
+            url: 'thisistheurl.com',
+            genre: 'thisisthegenre'
+          }
+        })
+        .end((error, response) => {
+          response.should.have.status(201);
+          response.should.be.json;
+          response.body.should.be.a('object');
+          (response.body).should.have.property('id');
+          response.body.id.should.equal(31);
+          done()
+        })
+    })
+  })
+
+  describe('POST /api/v1/pictures', () => {
+    it('should create a new picture', done => {
+      chai.request(server)
+        .post('/api/v1/pictures')
+        .send({
+          picture: {
+            url: 'wowow.jpg',
+            game_id: 1,
+            gameName: 'Fallout 76'
+          }
+        })
+        .end((error, response) => {
+          response.should.have.status(201);
+          response.should.be.json;
+          response.body.should.be.a('object');        
+          (response.body).should.have.property('id');
+          response.body.id.should.equal(61);
+          done()
+        })
+    })
+  })
+
+  describe('PATCH /api/v1/games/:id', () => {
+    it('should update the contents of a specific game', done => {
+      chai.request(server)
+        .get('/api/v1/games')
+        .end((error, response) => {
+          chai.request(server)
+            .patch('/api/v1/games/' + response.body[0].id)
+            .send({
+              game: {
+                title: 'Tony'
+              }
+            })
+            .end((error, response) => {
+              response.should.have.status(202);
+              response.should.be.json;
+              response.body.should.be.a('object');
+              response.body.should.have.property('id');
+              response.body.id.should.equal(1);
+              done();
+            })
+        })
+    })
+  })
+
+  describe('PATCH /api/v1/pictures/:id', () => {
+    it('should update a the contents of a specific picture', done => {
+      chai.request(server)
+        .get('/api/v1/pictures')
+        .end((error, response) => {
+          chai.request(server)
+            .patch('/api/v1/pictures/' + response.body[0].id)
+            .send({
+              picture: {
+                url: 'blah.blah.jpg'
+              }
+            })
+            .end((error, response) => {
+              response.should.have.status(202);
+              response.should.be.json;
+              response.body.should.have.property('id');
+              response.body.id.should.equal(1)
+              done();
+            })
+        })
+    })
+  })
+
+  describe('DELETE, api/v1/games/:id', () => {
+    it('should delete a specific game based on parameters', done => {
+      chai.request(server)
+        .get('/api/v1/games')
+        .end((error, response) => {
+          chai.request(server)
+            .delete('/api/v1/games/' + response.body[0].id)
+            .end((error, response) => {
+              response.should.have.status(204);
+              done();
+            })
+        })
+    })
+  })
+
+  describe('DELETE, api/v1/pictures/:id', () => {
+    it.only('should delete a specific pictures based on parameters', done => {
+      chai.request(server)
+        .get('/api/v1/pictures')
+        .end((error, response) => {
+          chai.request(server)
+            .delete('/api/v1/pictures/' + response.body[0].id)
+            .end((error, response) => {
+              response.should.have.status(204);
+              done();
+            })
+        })
+    })
+  })
 });
