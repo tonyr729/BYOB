@@ -46,7 +46,7 @@ describe('API Routes', () => {
   });
 
   describe('POST /', () => {
-    it.skip('should return a response with a token', done => {
+    it('should return a response with a token', done => {
       chai.request(server)
         .post('/')
         .send({
