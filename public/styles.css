@@ -28,4 +28,5 @@ button {
   border: 1px solid;
   margin: 20px 0;
   height: 50px;
+  overflow-wrap: break-word;
 }
