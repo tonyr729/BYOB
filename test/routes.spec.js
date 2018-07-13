@@ -46,7 +46,7 @@ describe('API Routes', () => {
   });
 
   describe('POST /', () => {
-    it('should return a response with a token', done => {
+    it.skip('should return a response with a token', done => {
       chai.request(server)
         .post('/')
         .send({
@@ -385,17 +385,17 @@ describe('API Routes', () => {
     })
   })
 
-  // it('should delete a specific game based on parameters', done => {
-  //   chai.request(server)
-  //     .get('/api/v1/games')
-  //     .end((error, response) => {
-  //       chai.request(server)
-  //         .delete('/api/v1/games/' + response.body[0].id)
-  //         .end((error, response) => {
-  //           response.should.have.status(204);
-  //           done();
-  //         })
-  //     })
-  // })
+  it('should delete a specific game based on parameters', done => {
+    chai.request(server)
+      .get('/api/v1/games')
+      .end((error, response) => {
+        chai.request(server)
+          .delete('/api/v1/games/' + response.body[0].id)
+          .end((error, response) => {
+            response.should.have.status(204);
+            done();
+          })
+      })
+  })
 
 });
