@@ -10,7 +10,7 @@ document.getElementById("formSubmit").onsubmit = function onSubmit(event) {
 }
 
 const postUserInfo = (email, appName) => {
-  const url = 'http://localhost:3000/';
+  const url = '/';
   const data = {email, appName};
 
   fetch(url, {
