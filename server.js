@@ -4,12 +4,15 @@ const bodyParser = require('body-parser')
 const jwt = require('jsonwebtoken')
 const secretKey = require('./secret_key');
 
+
+app.set('port', process.env.PORT || 3000);
+app.locals.title = 'BYOB';
+
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
 
-app.set('port', process.env.PORT || 3000);
-app.locals.title = 'BYOB';
+console.log(environment)
 
 app.use(bodyParser.json())
 app.use(express.static('public'));
@@ -186,3 +189,5 @@ app.delete('/api/v1/pictures/:id', checkAuth, (request, response) => {
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
 });
+
+module.exports = app;
