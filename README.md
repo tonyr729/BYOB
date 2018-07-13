@@ -1,4 +1,4 @@
-https://travis-ci.org/tonyr729/BYOB.svg?branch=master
+[![Build Status](https://travis-ci.org/tonyr729/BYOB.svg?branch=master)](https://travis-ci.org/tonyr729/BYOB)
 
 #BYOB
 
