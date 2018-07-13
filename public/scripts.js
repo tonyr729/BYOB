@@ -25,7 +25,7 @@ const postUserInfo = (email, appName) => {
       tokenContainer.innerText = 'Token: ' + data.token;
     })
     .catch(error => {
-      tokenContainer.innerText = json.stringify(error)
+      tokenContainer.innerText = JSON.stringify(error)
     })
 };
 

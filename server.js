@@ -19,11 +19,17 @@ app.use(express.static('public'));
 
 app.post('/', (request, response) => {
   const { email, appName } = request.body;
+  
   if ( email && appName) {
     const payload = { email, appName }
-    const token = jwt.sign(payload, process.env.SECRET_KEY);
 
-    response.status(201).json({ token })
+    try {
+      const token = jwt.sign(payload, process.env.SECRET_KEY);
+  
+      response.status(201).json({ token })
+    } catch (error) {
+      response.status(500).json({error})
+    }
   } else {
     response.status(500).json({error: 'Invalid keys within request body.'})
   }
